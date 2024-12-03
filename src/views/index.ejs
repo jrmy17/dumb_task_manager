@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dumb Task Manager</title>
-    <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
     <p>Welcome to DTM ! (Dumb Task Manager)</p>
     <% if(userId){ %>
-        <p>Please <a href="/tasks?userId=<%=userId%>">click on the link</a> to access your tasks</p>
-        <% }else{
-            %> 
-            <p>Please <a href="/login">go to login page</a></p>
-            <%
-        } %>
-</body>
+    <p>
+      Please <a href="/tasks?userId=<%=userId%>">click on the link</a> to access
+      your tasks
+    </p>
+    <% }else{ %>
+    <p>Please <a href="/login">go to login page</a></p>
+    <% } %>
+  </body>
 </html>

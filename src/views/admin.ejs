@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin section</title>
-</head>
-<body>
+  </head>
+  <body>
     <p>Welcome to admin section</p>
-    <p>users : </p>
+    <p>users :</p>
     <div class="users_list">
-        <ul>
+      <ul>
         <% users.map((user)=> { %>
-            <li>username: <%= user.username %> - 
-                <a href="/admin/delete-user?idToDelete=<%= user.id %>">Remove User</a></li>
+        <li>
+          username: <%= user.username %> -
+          <a href="/admin/delete-user?idToDelete=<%= user.id %>">Remove User</a>
+        </li>
         <% }) %>
-        </ul>
+      </ul>
     </div>
-    <br/>
-</body>
+    <br />
+  </body>
 </html>
