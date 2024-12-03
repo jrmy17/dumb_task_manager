@@ -1,32 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Your tasks</title>
-    <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
     <% data.map((el)=> { %>
-        <p class="task">Task Number <%= el.id %> <br/>
-        <%= el.title %><br/>
-        <%= el.description %><br/>
-        <a href="/tasks/remove?taskId=<%= el.id %>&userId=<%=userId%>">supprimer</a>
-        </p>
+    <p class="task">
+      Task Number <%= el.id %> <br />
+      <%= el.title %><br />
+      <%= el.description %><br />
+      <a href="/tasks/remove?taskId=<%= el.id %>&userId=<%=userId%>"
+        >supprimer</a
+      >
+    </p>
 
-   <% }) %>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <div class="add_task">
-            <form action="/tasks?userId=<%=userId%>" method="POST">
-                <p>Add a task</p>
-                <label for="title">task title</label><input type="text" name="title"><br>
-                <label for="description">task description</label><input type="text" name="description"><br>
-                <label for="completion">task completed ?</label><input type="checkbox" name="completion"><br>
-                <button type="submit">Add Task !</button>
-            </form>
-        </div>
-</body>
+    <% }) %>
+    <br />
+    <br />
+    <br />
+    <br />
+    <div class="add_task">
+      <form action="/tasks?userId=<%=userId%>" method="POST">
+        <p>Add a task</p>
+        <label for="title">task title</label
+        ><input type="text" name="title" /><br />
+        <label for="description">task description</label
+        ><input type="text" name="description" /><br />
+        <label for="completion">task completed ?</label
+        ><input type="checkbox" name="completion" /><br />
+        <button type="submit">Add Task !</button>
+      </form>
+    </div>
+  </body>
 </html>
