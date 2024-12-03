@@ -1,23 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin section</title>
-  </head>
-  <body>
-    <p>Welcome to admin section</p>
-    <p>users :</p>
-    <div class="users_list">
-      <ul>
-        <% users.map((user)=> { %>
-        <li>
-          username: <%= user.username %> -
-          <a href="/admin/delete-user?idToDelete=<%= user.id %>">Remove User</a>
-        </li>
-        <% }) %>
-      </ul>
-    </div>
-    <br />
-  </body>
-</html>
+<%- contentFor('body') %>
+<p>Welcome to admin section</p>
+<p>users :</p>
+<div class="users_list">
+  <ul>
+    <% users.map((user)=> { %>
+    <li>
+      username: <%= user.username %> -
+      <a href="/admin/delete-user?idToDelete=<%= user.id %>">Remove User</a>
+    </li>
+    <% }) %>
+  </ul>
+</div>
