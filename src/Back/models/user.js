@@ -1,32 +1,36 @@
-const sqlite3 = require("sqlite3").verbose();
-const path = require("path");
+const { Pool } = require('pg');
+const pool = new Pool();
 
-const db = new sqlite3.Database(
-  path.join(__dirname, "../../Data/config/tasks.sqlite"),
-  (err) => {}
-);
+pool.query(`CREATE TABLE IF NOT EXISTS users (
+  id        integer GENERATED ALWAYS AS IDENTITY UNIQUE,
+  username  varchar(40) NOT NULL,
+  password  varchar(255) NOT NULL,
+  email     varchar(64) NOT NULL,
+  createdAt timestamp NOT NULL,
+  isAdmin   boolean NOT NULL
+)`)
 
 const User = {
   create: (user, callback) => {
     const query =
-      "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
+      "INSERT INTO users (username, password, email, isAdmin, createdAt) VALUES ($1, $2, $3, false, NOW()) RETURNING id";
     const params = [user.username, user.password, user.email];
-    db.run(query, params, function (err) {
-      callback(null, { id: this.lastID, ...user });
+    pool.query(query, params, function (err, user) {
+      callback(null, user.rows[0]);
     });
   },
 
   getAll: (callback) => {
-    db.all("SELECT * FROM users", [], (err, results) => {
-      callback(results);
+    pool.query("SELECT * FROM users", [], (err, results) => {
+      callback(results.rows);
     });
   },
 
   findByUsername: (username, callback) => {
     console.log(username);
-    const query = "SELECT * FROM users WHERE username = ?";
-    db.get(query, [username], (err, user) => {
-      callback(err, user);
+    const query = "SELECT * FROM users WHERE username = $1";
+    pool.query(query, [username], (err, user) => {
+      callback(err, user.rows[0]);
     });
   },
 
@@ -42,8 +46,8 @@ const User = {
 
   // Récupération d'un utilisateur par ID
   findById: (id, callback) => {
-    const query = "SELECT * FROM users WHERE id = " + id;
-    db.get(query, [], (err, user) => {
+    const query = "SELECT * FROM users WHERE id = $1";
+    pool.query(query, [id], (err, user) => {
       return user;
     });
   },

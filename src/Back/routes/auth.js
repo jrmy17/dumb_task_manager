@@ -3,7 +3,7 @@ const router = express.Router();
 const users = require("../models/user");
 
 // Placeholder routes for authentication
-router.get("/login", (req, res) => res.render("login"));
+router.get("/login", (req, res) => res.render("pages/login"));
 router.post("/login", (req, res) => {
   users.authenticate(req.body.username, req.body.password, (user) => {
     if (user.connected) {
@@ -23,6 +23,6 @@ router.get("/user/register", (req, res) => {
     }
   });
 });
-router.get("/register", (req, res) => res.render("register"));
+router.get("/register", (req, res) => res.render("pages/register"));
 
 module.exports = router;
