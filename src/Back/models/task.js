@@ -3,7 +3,7 @@ const path = require("path");
 
 // Connexion à la base de données SQLite
 const db = new sqlite3.Database(
-  path.join(__dirname, "../config/tasks.sqlite"),
+  path.join(__dirname, "../../Data/config/tasks.sqlite"),
   (err) => {
     if (err) {
       console.error(

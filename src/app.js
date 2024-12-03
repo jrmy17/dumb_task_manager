@@ -15,15 +15,16 @@ app.use(
     saveUninitialized: true,
   })
 );
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "Front/public")));
 
 // View engine setup
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "Front/views"));
 
 // Routes
-const authRoutes = require("./routes/auth");
-const taskRoutes = require("./routes/tasks");
-const adminRoutes = require("./routes/admin");
+const authRoutes = require("./Back/routes/auth");
+const taskRoutes = require("./Back/routes/tasks");
+const adminRoutes = require("./Back/routes/admin");
 
 app.get("/", (req, res) => {
   console.log(req.query);
