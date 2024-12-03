@@ -15,7 +15,7 @@ const authenticate = (req, res, next) => {
 router.get("/", (req, res) => {
   var userId = req.query.userId;
   tasks.getAllByUser(parseInt(userId), (err, data) => {
-    res.render("dashboard", { data, userId });
+    res.render("pages/dashboard", { data, userId });
   });
 });
 

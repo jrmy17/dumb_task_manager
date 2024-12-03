@@ -7,16 +7,11 @@
     <link rel="stylesheet" href="/css/styles.css" />
     <link href="./css/output.css" rel="stylesheet" />
   </head>
-  <body>
-    <p>Welcome to DTM ! (Dumb Task Manager)</p>
-    <h1 class="text-3xl font-bold underline">Hello world!</h1>
-    <% if(userId){ %>
-    <p>
-      Please <a href="/tasks?userId=<%=userId%>">click on the link</a> to access
-      your tasks
-    </p>
-    <% }else{ %>
-    <p>Please <a href="/login">go to login page</a></p>
-    <% } %>
+  <body class="bg-gray-50 min-h-screen flex flex-col">
+    <%- include('layout/header') %>
+
+    <main class="container mx-auto px-4 py-8 flex-grow"><%- body %></main>
+
+    <%- include('layout/footer') %>
   </body>
 </html>

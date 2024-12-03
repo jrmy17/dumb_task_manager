@@ -1,21 +1,9 @@
-<h2>Register Page</h2>
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>register</title>
-    <link rel="stylesheet" href="/css/styles.css" />
-  </head>
-  <body>
-    <p>please fill the form to register</p>
-    <form action="/user/register" method="get">
-      <label for="username">username : </label
-      ><input type="text" name="username" /> <label for="email">email :</label
-      ><input type="text" name="email" />
-      <label for="password">password :</label
-      ><input type="text" name="password" />
-      <button type="submit">Register !</button>
-    </form>
-  </body>
-</html>
+<%- contentFor('body') %>
+<p>please fill the form to register</p>
+<form action="/user/register" method="get">
+  <label for="username">username : </label
+  ><input type="text" name="username" /> <label for="email">email :</label
+  ><input type="text" name="email" /> <label for="password">password :</label
+  ><input type="text" name="password" />
+  <button type="submit">Register !</button>
+</form>
