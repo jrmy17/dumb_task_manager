@@ -8,13 +8,18 @@
   </head>
   <body>
     <% data.map((el)=> { %>
-    <p class="task">
+    <p class="task <%= el.completed ? 'completed' : '' %>">
       Task Number <%= el.id %> <br />
       <%= el.title %><br />
       <%= el.description %><br />
-      <a href="/tasks/remove?taskId=<%= el.id %>&userId=<%=userId%>"
-        >supprimer</a
-      >
+      <% if (el.completedAt) { %>
+        Completed on: <%= new Date(el.completedAt).toLocaleDateString() %><br />
+      <% } %>
+      <form action="/tasks/toggle/<%= el.id %>?userId=<%=userId%>" method="POST" style="display: inline;">
+        <input type="hidden" name="completed" value="<%= !el.completed %>">
+        <button type="submit"><%= el.completed ? 'Mark as Incomplete' : 'Mark as Complete' %></button>
+      </form>
+      <a href="/tasks/remove?taskId=<%= el.id %>&userId=<%=userId%>">supprimer</a>
     </p>
 
     <% }) %>

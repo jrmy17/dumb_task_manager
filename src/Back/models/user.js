@@ -1,15 +1,26 @@
-bcrypt = require('bcryptjs');
-const { Pool } = require('pg');
+bcrypt = require("bcryptjs");
+const { Pool } = require("pg");
 const pool = new Pool();
 
-pool.query(`CREATE TABLE IF NOT EXISTS users (
-  id        integer GENERATED ALWAYS AS IDENTITY UNIQUE,
-  username  varchar(40) NOT NULL,
+const createTableQuery = `
+CREATE TABLE IF NOT EXISTS users (
+  id        SERIAL PRIMARY KEY,
+  username  varchar(40) NOT NULL UNIQUE,
   password  varchar(255) NOT NULL,
-  email     varchar(64) NOT NULL,
-  createdAt timestamp NOT NULL,
-  isAdmin   boolean NOT NULL
-)`)
+  email     varchar(64) NOT NULL UNIQUE,
+  createdAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  isAdmin   boolean NOT NULL DEFAULT false
+)`;
+
+const createUsersTable = pool
+  .query(createTableQuery)
+  .then(() => {
+    console.log("Table users créée avec succès");
+  })
+  .catch((err) => {
+    console.error("Erreur lors de la création de la table users:", err);
+    throw err;
+  });
 
 const User = {
   create: (user, callback) => {
@@ -38,9 +49,17 @@ const User = {
 
   authenticate: (username, password, callback) => {
     User.findByUsername(username, (err, user) => {
-      if (bcrypt.compareSync(password, user?.password)) {
+      if (err) {
+        return callback(err, null);
+      }
+      if (!user) {
+        return callback(new Error("Utilisateur non trouvé"), null);
+      }
+      if (bcrypt.compareSync(password, user.password)) {
         user.connected = true;
-        return callback(user.id);
+        return callback(null, user);
+      } else {
+        return callback(new Error("Mot de passe incorrect"), null);
       }
     });
   },
@@ -54,4 +73,4 @@ const User = {
   },
 };
 
-module.exports = User;
+module.exports = { User, createUsersTable };
