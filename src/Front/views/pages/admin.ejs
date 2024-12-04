@@ -1,23 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin section</title>
-  </head>
-  <body>
-    <p>Welcome to admin section</p>
-    <p>users :</p>
-    <div class="users_list">
-      <ul>
-        <% users.map((user)=> { %>
-        <li>
-          username: <%= user.username %> -
-          <a href="/admin/delete-user?idToDelete=<%= user.id %>">Remove User</a>
-        </li>
-        <% }) %>
-      </ul>
+<%- contentFor('body') %>
+<div class="max-w-4xl mx-auto">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-2xl font-bold text-gray-900">Administration</h1>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">
+      Liste des utilisateurs
+    </h2>
+    <div class="divide-y divide-gray-200">
+      <% users.map((user) => { %>
+      <div class="py-4 flex justify-between items-center">
+        <div>
+          <h3 class="text-lg font-medium text-gray-900">
+            <%= user.username %>
+          </h3>
+          <p class="text-sm text-gray-500">ID: <%= user.id %></p>
+        </div>
+        <div class="flex items-center space-x-4">
+          <form
+            action="/admin/toggle-admin?userId=<%= user.id %>"
+            method="POST"
+            class="flex items-center"
+          >
+            <input type="checkbox" name="isAdmin" <%= user.isAdmin ? 'checked' :
+            '' %> onchange="this.form.submit()" class="h-4 w-4 text-blue-600
+            focus:ring-blue-500 border-gray-300 rounded mr-2" />
+            <label class="text-sm text-gray-700">Admin</label>
+          </form>
+          <form
+            action="/admin/delete-user?idToDelete=<%= user.id %>"
+            method="POST"
+            onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.')"
+          >
+            <button
+              type="submit"
+              class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+            >
+              Supprimer
+            </button>
+          </form>
+        </div>
+      </div>
+      <% }) %>
     </div>
-    <br />
-  </body>
-</html>
+  </div>
+</div>

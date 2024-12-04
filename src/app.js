@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 const path = require("path");
 const dotenv = require("dotenv").config()
+const expressLayouts = require("express-ejs-layouts");
 
 // Middleware
 
@@ -17,10 +18,12 @@ app.use(
   })
 );
 app.use(express.static(path.join(__dirname, "Front/public")));
+app.use(expressLayouts);
 
 // View engine setup
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "Front/views"));
+app.set("layout", "index");
 
 // Routes
 const authRoutes = require("./Back/routes/auth");
@@ -30,7 +33,7 @@ const adminRoutes = require("./Back/routes/admin");
 app.get("/", (req, res) => {
   console.log(req.query);
   var userId = req.query.userId;
-  res.render("index", { userId: userId });
+  res.render("pages/home", { userId: userId });
 });
 app.use("/", authRoutes);
 app.use("/tasks", taskRoutes);
