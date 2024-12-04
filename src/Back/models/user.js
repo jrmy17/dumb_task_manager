@@ -1,52 +1,76 @@
-const sqlite3 = require("sqlite3").verbose();
-const path = require("path");
+bcrypt = require("bcryptjs");
+const { Pool } = require("pg");
+const pool = new Pool();
 
-const db = new sqlite3.Database(
-  path.join(__dirname, "../../Data/config/tasks.sqlite"),
-  (err) => {}
-);
+const createTableQuery = `
+CREATE TABLE IF NOT EXISTS users (
+  id        SERIAL PRIMARY KEY,
+  username  varchar(40) NOT NULL UNIQUE,
+  password  varchar(255) NOT NULL,
+  email     varchar(64) NOT NULL UNIQUE,
+  createdAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  isAdmin   boolean NOT NULL DEFAULT false
+)`;
+
+const createUsersTable = pool
+  .query(createTableQuery)
+  .then(() => {
+    console.log("Table users créée avec succès");
+  })
+  .catch((err) => {
+    console.error("Erreur lors de la création de la table users:", err);
+    throw err;
+  });
 
 const User = {
   create: (user, callback) => {
     const query =
-      "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
-    const params = [user.username, user.password, user.email];
-    db.run(query, params, function (err) {
-      callback(null, { id: this.lastID, ...user });
+      "INSERT INTO users (username, password, email, isAdmin, createdAt) VALUES ($1, $2, $3, false, NOW()) RETURNING id";
+    const hash = bcrypt.hashSync(user.password, 8);
+    const params = [user.username, hash, user.email];
+    pool.query(query, params, function (err, user) {
+      callback(err, user.rows[0]);
     });
   },
 
   getAll: (callback) => {
-    db.all("SELECT * FROM users", [], (err, results) => {
-      callback(results);
+    pool.query("SELECT * FROM users", [], (err, results) => {
+      callback(results.rows);
     });
   },
 
   findByUsername: (username, callback) => {
     console.log(username);
-    const query = "SELECT * FROM users WHERE username = ?";
-    db.get(query, [username], (err, user) => {
-      callback(err, user);
+    const query = "SELECT * FROM users WHERE username = $1";
+    pool.query(query, [username], (err, user) => {
+      callback(err, user.rows[0]);
     });
   },
 
   authenticate: (username, password, callback) => {
     User.findByUsername(username, (err, user) => {
-      console.log({ user, password });
-      if (user.password == password) {
+      if (err) {
+        return callback(err, null);
+      }
+      if (!user) {
+        return callback(new Error("Utilisateur non trouvé"), null);
+      }
+      if (bcrypt.compareSync(password, user.password)) {
         user.connected = true;
-        return callback(user);
+        return callback(null, user);
+      } else {
+        return callback(new Error("Mot de passe incorrect"), null);
       }
     });
   },
 
   // Récupération d'un utilisateur par ID
   findById: (id, callback) => {
-    const query = "SELECT * FROM users WHERE id = " + id;
-    db.get(query, [], (err, user) => {
+    const query = "SELECT * FROM users WHERE id = $1";
+    pool.query(query, [id], (err, user) => {
       return user;
     });
   },
 };
 
-module.exports = User;
+module.exports = { User, createUsersTable };

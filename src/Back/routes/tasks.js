@@ -30,11 +30,19 @@ router.get("/remove", (req, res) => {
 });
 
 router.post("/", authenticate, (req, res) => {
-  const { title, description, completed } = req.body;
+  const { title, description, completion } = req.body;
   let userId = req.query.userId;
   tasks.create(
-    { user_id: userId, title, description, completed: 0 },
+    {
+      user_id: userId,
+      title,
+      description,
+      completed: completion,
+    },
     (err, task) => {
+      if (err) {
+        return res.status(500).send(err.message);
+      }
       if (task) {
         res.redirect(`/tasks?userId=${userId}`);
       }
@@ -56,6 +64,19 @@ router.put("/:id", authenticate, (req, res) => {
   if (completed !== undefined) task.completed = completed;
 
   res.json(task);
+});
+
+router.post("/toggle/:id", authenticate, (req, res) => {
+  const taskId = req.params.id;
+  const userId = req.query.userId;
+  const completed = req.body.completed === "true";
+
+  tasks.toggleComplete(taskId, completed, (err, task) => {
+    if (err) {
+      return res.status(500).send(err.message);
+    }
+    res.redirect(`/tasks?userId=${userId}`);
+  });
 });
 
 module.exports = router;
