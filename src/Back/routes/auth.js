@@ -16,7 +16,7 @@ router.get("/user/register", (req, res) => {
   var password = req.query.password;
   let email = req.query.email;
   users.create({ username, password, email }, (err, user) => {
-    if (user) {
+    if (user.id) {
       res.redirect("/login");
     } else {
       res.redirect("/");

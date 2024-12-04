@@ -1,3 +1,4 @@
+bcrypt = require('bcryptjs');
 const { Pool } = require('pg');
 const pool = new Pool();
 
@@ -14,9 +15,10 @@ const User = {
   create: (user, callback) => {
     const query =
       "INSERT INTO users (username, password, email, isAdmin, createdAt) VALUES ($1, $2, $3, false, NOW()) RETURNING id";
-    const params = [user.username, user.password, user.email];
+    const hash = bcrypt.hashSync(user.password, 8);
+    const params = [user.username, hash, user.email];
     pool.query(query, params, function (err, user) {
-      callback(null, user.rows[0]);
+      callback(err, user.rows[0]);
     });
   },
 
@@ -36,10 +38,9 @@ const User = {
 
   authenticate: (username, password, callback) => {
     User.findByUsername(username, (err, user) => {
-      console.log({ user, password });
-      if (user.password == password) {
+      if (bcrypt.compareSync(password, user?.password)) {
         user.connected = true;
-        return callback(user);
+        return callback(user.id);
       }
     });
   },
