@@ -16,10 +16,20 @@ router.post("/login", (req, res) => {
     res.redirect("/login");
   });
 });
-router.get("/user/register", (req, res) => {
-  let username = req.query.username;
-  var password = req.query.password;
-  let email = req.query.email;
+router.post("/user/register", (req, res) => {
+  const { username, password, email, confirmPassword, gdpr } = req.body;
+  if( username == "" ){
+    console.log("username")
+    res.status(400);
+    res.render("pages/register", { err : "L'username ne peut pas être vide."})
+    return;
+  }
+  if( password == "" || password.length < 12 || !RegExp("/[a-z]+/").test(password) || !RegExp("/[A-Z]+/").test(password) || !RegExp("/[0-9]+/").test(password) || !RegExp("/[&#'{(\[\-|_\\^@)\]$%!?.)}]+/").test(password) ){
+    console.log("password", password, password == "", password.length < 12, !RegExp("/[a-z]/").test(password), !RegExp("/[A-Z]/").test(password), !RegExp("/[0-9]/").test(password), !RegExp("/[&#'{(\[\-|_\\^@)\]$%!?.}]/").test(password))
+    res.status(400);
+    res.render("pages/register", { err : "Vérifier votre mot de passe"})
+    return;
+  }
   User.create({ username, password, email }, (err, user) => {
     if (user && user.id) {
       res.redirect("/login");
