@@ -10,11 +10,12 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
+    "connect-pg-simple": "^10.0.0",
     "dotenv": "^16.4.6",
     "ejs": "^2.1.8",
     "express": "4.8.8",
     "express-ejs-layouts": "^2.5.1",
-    "express-session": "^1.17.3",
+    "express-session": "^1.18.1",
     "pg": "^8.13.1",
     "sqlite3": "^5.1.6",
     "task_manager_app": "file:"

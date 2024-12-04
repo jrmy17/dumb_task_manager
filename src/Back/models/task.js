@@ -73,20 +73,16 @@ const Task = {
   },
 
   // Supprimer une tâche
-  delete: (id, callback) => {
-    const query = "DELETE FROM tasks WHERE id = $1";
-    pool.query(query, [id], function (err) {
+  delete: (taskId, userId, callback) => {
+    const query = "DELETE FROM tasks WHERE id = $1 AND userId = $2";
+    pool.query(query, [taskId, userId], (err, result) => {
       if (err) {
-        console.error(
-          "Erreur lors de la suppression de la tâche:",
-          err.message
-        );
-        callback(err, null);
-      } else if (this.changes === 0) {
-        callback(new Error("Tâche non trouvée"), null);
-      } else {
-        callback(null, { id });
+        return callback(err);
       }
+      if (result.rowCount === 0) {
+        return callback(new Error("Tâche non trouvée ou non autorisée"));
+      }
+      callback(null, { id: taskId });
     });
   },
 
@@ -101,6 +97,25 @@ const Task = {
     pool.query(query, [completed, completedAt, taskId], (err, result) => {
       if (err) {
         return callback(err, null);
+      }
+      callback(null, result.rows[0]);
+    });
+  },
+
+  toggle: (taskId, userId, callback) => {
+    const query = `
+      UPDATE tasks 
+      SET completed = NOT completed,
+          completedAt = CASE 
+            WHEN NOT completed THEN NOW() 
+            ELSE NULL 
+          END
+      WHERE id = $1 AND userId = $2
+      RETURNING *`;
+
+    pool.query(query, [taskId, userId], (err, result) => {
+      if (err) {
+        return callback(err);
       }
       callback(null, result.rows[0]);
     });
