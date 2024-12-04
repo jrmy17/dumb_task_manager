@@ -43,6 +43,22 @@ const Task = {
     });
   },
 
+  getById: (id, callback) => {
+    const query = "SELECT * FROM tasks WHERE id = $1";
+    pool.query(query, [id], (err, task) => {
+      if (err) {
+        console.error(
+          "Erreur lors de la récupération de la tâches:",
+        );
+        callback(err, null);
+      } else if (task.rows.length == 0) {
+        callback(null, null)
+      } else {
+        callback(null, task.rows[0])
+      }
+    })
+  },
+
   create: (task, callback) => {
     const query =
       "INSERT INTO tasks (title, description, completed, completedAt, userId, createdAt) VALUES ($1, $2, $3, $4, $5, NOW()) RETURNING *";
@@ -85,7 +101,7 @@ const Task = {
       } else if (this.changes === 0) {
         callback(new Error("Tâche non trouvée"), null);
       } else {
-        callback(null, { id });
+        callback(null, id);
       }
     });
   },

@@ -5,7 +5,7 @@ const router = express.Router();
 const tasks = require("../models/task");
 
 const authenticate = (req, res, next) => {
-  if (req.query.userId) {
+  if (req.session.userId) {
     next();
   } else {
     res.status(401).send("Unauthorized");
@@ -13,18 +13,29 @@ const authenticate = (req, res, next) => {
 };
 
 router.get("/", (req, res) => {
-  var userId = req.query.userId;
+  const userId = req.session.userId;
   tasks.getAllByUser(parseInt(userId), (err, data) => {
     res.render("pages/dashboard", { data, userId });
   });
 });
 
-router.get("/remove", (req, res) => {
-  var taskId = req.query.taskId;
-  var userId = req.query.userId;
-  if (userId) {
-    tasks.delete(taskId, () => {
-      res.redirect(`/tasks?userId=${userId}`);
+router.post("/remove", (req, res) => {
+  const { taskId } = req.body;
+  const task = tasks.getById(taskId);
+  if(!task){
+    res.status(400);
+    res.render("pages/dashboard", { data, userId, error: "La task à supprimer n'existe pas."});
+    return;
+  }
+  const userId = req.session.userId;
+  if (userId == task.userId) {
+    tasks.delete(taskId, (err, taskId) => {
+      if(err){
+        res.status(500);
+        res.render("pages/dashboard", { data, userId, error: err})
+        return
+      }
+      res.render("pages/dashboard", { data, userId, success: `La task d'id ${taskId} a bien été supprimée.`});
     });
   }
 });

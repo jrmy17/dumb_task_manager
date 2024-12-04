@@ -1,0 +1,21 @@
+name: Simple test
+
+on:
+  workflow_dispatch: ~
+  push: ~
+
+jobs:
+  runTest:
+    name: execute simple test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+
+      - name: Install deps
+        run: npm i
+
+      - name: Run tests
+        run: npm run test
