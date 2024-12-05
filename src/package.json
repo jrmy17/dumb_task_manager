@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node --watch app.js",
     "setup": "node ./Data/config/db-init.js && node ./Data/config/seed.js && node --watch app.js",
-    "test": "jest",
+    "test:back": "jest src/Back/tests",
     "docker-start": "docker compose up"
   },
   "dependencies": {
