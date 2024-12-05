@@ -1,0 +1,6 @@
+ess.Commands.add('fillFormAndSubmit', {prevSubject: "element"}, (subject, data) => {
+    Object.entries(data).forEach((entry) => {
+        const [key, value] = entry;
+        cy.get(`input[name="${key}"]`)
+    })
+})

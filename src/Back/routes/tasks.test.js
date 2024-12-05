@@ -41,8 +41,76 @@ describe( 'Tasks router test', () => {
             })    
     })
 
-    test('add task', function(done){
-        
+    test('add task empty', function(done){
+        authenticatedSession
+            .post('/')
+            .
+    })
+
+    test('add task uncomplete', function(done){
+        authenticatedSession
+            .post('/')
+            .
+    })
+
+    test('add task not logged in', function(done){
+        authenticatedSession
+            .post('/')
+            .
+    })
+
+    test('add task okay', function(done){
+        authenticatedSession
+            .post('/')
+            .
+    })
+
+    test('update task empty', function(done){
+        authenticatedSession
+            .post('/')
+            .
+    })
+
+    test('update task uncomplete', function(done){
+        authenticatedSession
+            .post('/')
+            .
+    })
+
+    test('update task not logged in', function(done){
+        authenticatedSession
+            .post('/')
+            .
+    })
+
+    test('update task okay', function(done){
+        authenticatedSession
+            .post('/')
+            .
+    })
+
+    test('delete task that doesn\'t exist', function(done){
+        authenticatedSession
+            .post('/')
+            .
+    })
+
+    test('delete task not logged in', function(done){
+        authenticatedSession
+            .post('/')
+            .
+    })
+
+    test('delete task of another user', function(done){
+        authenticatedSession
+            .post('/')
+            .
+    })
+
+    test('delete task okay', function(done){
+        authenticatedSession
+            .post('/')
+            .
     })
 
 } )
