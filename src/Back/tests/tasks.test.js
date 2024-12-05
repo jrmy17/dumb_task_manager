@@ -5,36 +5,52 @@ const dotenv = require("dotenv").config();
 jest.mock("../models/user");
 jest.mock("../models/task");
 
-test('Création d\'une task',  done => {
+describe("Tests des tâches", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test("Création d'une task", (done) => {
     const fakeUser = {
-        username: "david",
-        password: "0123456789aA$",
-        email: 'test@test.com'
-    }
-    Users.create(fakeUser, (err, res) => {
-        if(err){
-            done(err);
-            return;
-        }
-        console.log(res)
-        const fakeTask = {
-            title: "task-test",
-            description: "task de test",
-            completed: "off",
-            userId: res.id
-        }
-        Tasks.create(fakeTask, function(error, data){
-            if(error){
-                done(error);
-                return;
-            }
-            try {
-                expect(data).toHaveProperty('id');
-                done();
-            }catch(error){
-                done(error)
-            }
-        })
-    })
-    
-})
+      id: 1,
+      username: "david",
+      password: "0123456789aA$",
+      email: "test@test.com",
+    };
+
+    const fakeTask = {
+      id: 1,
+      title: "task-test",
+      description: "task de test",
+      completed: false,
+      userId: fakeUser.id,
+    };
+
+    User.create.mockImplementation((userData, callback) => {
+      callback(null, fakeUser);
+    });
+
+    Task.create.mockImplementation((taskData, callback) => {
+      callback(null, fakeTask);
+    });
+
+    User.create(fakeUser, (err, user) => {
+      expect(err).toBeNull();
+
+      const taskToCreate = {
+        title: "task-test",
+        description: "task de test",
+        completed: "off",
+        userId: user.id,
+      };
+
+      Task.create(taskToCreate, (error, task) => {
+        expect(error).toBeNull();
+        expect(task).toHaveProperty("id");
+        expect(task.title).toBe(fakeTask.title);
+        expect(task.description).toBe(fakeTask.description);
+        done();
+      });
+    });
+  }, 10000);
+});
