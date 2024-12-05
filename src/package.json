@@ -5,6 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node --watch app.js",
+    "setup": "node ./Data/config/db-init.js && node ./Data/config/seed.js && node --watch app.js",
+    "test": "jest",
     "docker-start": "docker compose up"
   },
   "dependencies": {
@@ -21,6 +23,7 @@
     "task_manager_app": "file:"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
     "tailwindcss": "^3.4.15"
   }
 }
