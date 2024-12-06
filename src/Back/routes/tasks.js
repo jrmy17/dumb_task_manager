@@ -64,22 +64,6 @@ router.post("/", authenticate, (req, res) => {
   );
 });
 
-router.put("/:id", authenticate, (req, res) => {
-  const { id } = req.params;
-  const { title, description, completed } = req.body;
-  const task = Task.find((task) => task.id === parseInt(id));
-
-  if (!task) {
-    return res.status(404).send("Task not found");
-  }
-
-  if (title !== undefined) task.title = title;
-  if (description !== undefined) task.description = description;
-  if (completed !== undefined) task.completed = completed;
-
-  res.json(task);
-});
-
 router.post("/toggle/:taskId", authenticate, (req, res) => {
   const taskId = req.params.taskId;
 

@@ -97,53 +97,7 @@ describe( 'Tasks router test', () => {
                 return done();
             })    
     })
-
-    test('update task that doesn\'t exist', function(done){
-        authenticatedSession
-            .put('/tasks/156198741254')
-            .end(function(err, res){
-                if(err){
-                    return done(err);
-                }
-                expect(404)
-                return done();
-            })    
-    })
-
-
-    // Impossible de récupérer l'id d'une task appartenant à l'user connecté
-    // test('update task uncomplete', function(done){
-    //     authenticatedSession
-    //         .get('/tasks')
-    //         .end(function(err, res){
-    //             if(err){
-    //                 return done(err);
-    //             }
-    //             authenticatedSession
-    //                 .put('/tasks/'+ res[0].id)
-    //                 .send({completed : true})
-    //                 .end(function(err, res){
-    //                     if(err){
-    //                         return done(err);
-    //                     }
-    //                     expect(200)
-    //                     return done();
-    //                 })    
-    //         })    
-    // })
-
-    // test('update task not logged in', function(done){
-    //     authenticatedSession
-    //         .post('/')
-    //         .
-    // })
-
-    // test('update task okay', function(done){
-    //     authenticatedSession
-    //         .post('/')
-    //         .
-    // })
-
+    
     // test('delete task that doesn\'t exist', function(done){
     //     authenticatedSession
     //         .post('/')
