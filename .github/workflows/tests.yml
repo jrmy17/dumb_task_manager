@@ -43,7 +43,7 @@ jobs:
         working-directory: ./src
         run: |
           cp .env.example .env
-          npm run setup
+          npm run init-db
 
       - name: Tests Backend
         working-directory: ./src
