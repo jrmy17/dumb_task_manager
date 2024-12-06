@@ -3,7 +3,7 @@ describe("Test des tâches", () => {
     cy.visit("/");
     cy.get('header a[href="/login"]').first().click();
     cy.get("#username").type("admin");
-    cy.get("#password").type("admin123");
+    cy.get("#password").type("fezq265e1rgAZZFS45$&d5az");
     cy.get("form").submit();
   });
 
