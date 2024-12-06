@@ -1,0 +1,16 @@
+import { fillFormAndSubmit } from "./partials/form";
+import { validLinkAndClick } from "./partials/link";
+
+describe('login/logout functions', () => {
+
+    it('Should connect user with right credentials', () => {
+        cy.visit('/')
+        const loginLin = cy.get("a")
+        validLinkAndClick(loginLink, 'go to login page')
+        const form = cy.get('form')
+        fillFormAndSubmit(form, { username: "alex", password: '12345' });
+        cy.get('.logged_message').should('be.visible')
+        cy.screeshot();
+    })
+
+})

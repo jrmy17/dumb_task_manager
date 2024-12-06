@@ -2,38 +2,6 @@ bcrypt = require("bcryptjs");
 const { Pool } = require("pg");
 const pool = new Pool();
 
-const createTableQuery = `
-CREATE TABLE IF NOT EXISTS users (
-  id        SERIAL PRIMARY KEY,
-  username  varchar(40) NOT NULL UNIQUE,
-  password  varchar(255) NOT NULL,
-  email     varchar(64) NOT NULL UNIQUE,
-  createdAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  isAdmin   boolean NOT NULL DEFAULT false
-)`;
-
-const createSessionTableQuery = `
-CREATE TABLE IF NOT EXISTS "session" (
-  "sid" varchar NOT NULL COLLATE "default",
-  "sess" json NOT NULL,
-  "expire" timestamp(6) NOT NULL,
-  CONSTRAINT "session_pkey" PRIMARY KEY ("sid")
-)`;
-
-const createUsersTable = pool
-  .query(createTableQuery)
-  .then(() => {
-    console.log("Table users créée avec succès");
-    return pool.query(createSessionTableQuery);
-  })
-  .then(() => {
-    console.log("Table session créée avec succès");
-  })
-  .catch((err) => {
-    console.error("Erreur lors de la création des tables:", err);
-    throw err;
-  });
-
 const User = {
   create: (user, callback) => {
     const query =
@@ -114,6 +82,5 @@ const User = {
 
 module.exports = {
   User,
-  pool,
-  createUsersTable,
+  pool
 };
