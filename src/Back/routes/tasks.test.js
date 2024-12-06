@@ -10,6 +10,10 @@ beforeEach(function () {
     testSession = session(server);
 });
 
+afterAll(done => {
+    server.close(done);
+});
+
 describe( 'Tasks router test', () => {
 
     let authenticatedSession;
