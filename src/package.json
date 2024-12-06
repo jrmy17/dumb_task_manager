@@ -7,6 +7,7 @@
     "start": "node --watch app.js",
     "setup": "node ./Data/config/db-init.js && node ./Data/config/seed.js && node --watch app.js",
     "test:back": "jest src/Back/tests",
+    "test:e2e": "npx cypress run",
     "docker-start": "docker compose up"
   },
   "dependencies": {
@@ -24,6 +25,7 @@
     "task_manager_app": "file:"
   },
   "devDependencies": {
+    "cypress": "^13.16.1",
     "jest": "^29.7.0",
     "supertest": "^7.0.0",
     "supertest-session": "^5.0.1",
