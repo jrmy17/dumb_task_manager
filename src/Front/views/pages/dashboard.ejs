@@ -1,25 +1,130 @@
-<%- contentFor('body') %> <% data.map((el)=> { %>
-<p class="task">
-  Task Number <%= el.id %> <br />
-  <%= el.title %><br />
-  <%= el.description %><br />
-  <a href="/tasks/remove?taskId=<%= el.id %>&userId=<%=userId%>">supprimer</a>
-</p>
+<%- contentFor('body') %>
+<div class="max-w-4xl mx-auto">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-2xl font-bold text-gray-900">Mes tâches</h1>
+    <button
+      onclick="document.getElementById('addTaskModal').classList.remove('hidden')"
+      class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    >
+      Nouvelle tâche
+    </button>
+  </div>
 
-<% }) %>
-<br />
-<br />
-<br />
-<br />
-<div class="add_task">
-  <form action="/tasks?userId=<%=userId%>" method="POST">
-    <p>Add a task</p>
-    <label for="title">task title</label
-    ><input type="text" name="title" /><br />
-    <label for="description">task description</label
-    ><input type="text" name="description" /><br />
-    <label for="completion">task completed ?</label
-    ><input type="checkbox" name="completion" /><br />
-    <button type="submit">Add Task !</button>
-  </form>
+  <div class="grid gap-4">
+    <% data.map((el) => { %>
+    <div
+      class="bg-white p-4 rounded-lg shadow-md <%= el.completed ? 'border-l-4 border-green-500' : '' %>"
+    >
+      <div class="flex justify-between items-center">
+        <div class="flex-1">
+          <h3
+            class="text-lg font-semibold text-gray-900 <%= el.completed ? 'line-through text-gray-500' : '' %>"
+          >
+            <%= el.title %>
+          </h3>
+          <p
+            class="text-gray-600 mt-1 <%= el.completed ? 'line-through' : '' %>"
+          >
+            <%= el.description %>
+          </p>
+        </div>
+        <div class="flex items-center gap-4">
+          <form
+            action="/tasks/toggle/<%= el.id %>"
+            method="POST"
+            class="inline"
+          >
+            <input type="checkbox" <%= el.completed ? 'checked' : '' %>
+            onchange="this.form.submit()" class="h-5 w-5 text-blue-600
+            focus:ring-blue-500 border-gray-300 rounded cursor-pointer" />
+          </form>
+          <a
+            href="/tasks/remove/<%= el.id %>"
+            class="px-3 py-1.5 bg-red-500 text-white rounded-md hover:bg-red-600 flex items-center"
+            onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?')"
+          >
+            Supprimer
+          </a>
+        </div>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+
+  <!-- Modal d'ajout de tâche -->
+  <div
+    id="addTaskModal"
+    class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
+  >
+    <div
+      class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white"
+    >
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-medium">Nouvelle tâche</h3>
+        <button
+          onclick="document.getElementById('addTaskModal').classList.add('hidden')"
+          class="text-gray-400 hover:text-gray-600"
+        >
+          ×
+        </button>
+      </div>
+
+      <form action="/tasks" method="POST" class="space-y-4">
+        <div>
+          <label for="title" class="block text-sm font-medium text-gray-700"
+            >Titre</label
+          >
+          <input
+            type="text"
+            id="title"
+            name="title"
+            required
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
+          <label
+            for="description"
+            class="block text-sm font-medium text-gray-700"
+            >Description</label
+          >
+          <textarea
+            id="description"
+            name="description"
+            rows="3"
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          ></textarea>
+        </div>
+
+        <div class="flex items-center">
+          <input
+            type="checkbox"
+            id="completion"
+            name="completion"
+            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+          />
+          <label for="completion" class="ml-2 block text-sm text-gray-700">
+            Tâche terminée
+          </label>
+        </div>
+
+        <div class="flex justify-end space-x-2">
+          <button
+            type="button"
+            onclick="document.getElementById('addTaskModal').classList.add('hidden')"
+            class="px-4 py-2 border text-gray-700 rounded-md hover:bg-gray-50"
+          >
+            Annuler
+          </button>
+          <button
+            type="submit"
+            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          >
+            Ajouter
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
