@@ -9,7 +9,7 @@ const User = {
     const hash = bcrypt.hashSync(user.password, 8);
     const params = [user.username, hash, user.email];
     pool.query(query, params, function (err, user) {
-      callback(err, user.rows[0]);
+      callback(err, err ? null : user.rows[0]);
     });
   },
 
