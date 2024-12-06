@@ -12,13 +12,25 @@ CREATE TABLE IF NOT EXISTS users (
   isAdmin   boolean NOT NULL DEFAULT false
 )`;
 
+const createSessionTableQuery = `
+CREATE TABLE IF NOT EXISTS "session" (
+  "sid" varchar NOT NULL COLLATE "default",
+  "sess" json NOT NULL,
+  "expire" timestamp(6) NOT NULL,
+  CONSTRAINT "session_pkey" PRIMARY KEY ("sid")
+)`;
+
 const createUsersTable = pool
   .query(createTableQuery)
   .then(() => {
     console.log("Table users créée avec succès");
+    return pool.query(createSessionTableQuery);
+  })
+  .then(() => {
+    console.log("Table session créée avec succès");
   })
   .catch((err) => {
-    console.error("Erreur lors de la création de la table users:", err);
+    console.error("Erreur lors de la création des tables:", err);
     throw err;
   });
 
@@ -34,8 +46,12 @@ const User = {
   },
 
   getAll: (callback) => {
-    pool.query("SELECT * FROM users", [], (err, results) => {
-      callback(results.rows);
+    const query = "SELECT id, username, isadmin FROM users ORDER BY id";
+    pool.query(query, [], (err, result) => {
+      if (err) {
+        return callback(err, null);
+      }
+      callback(null, result.rows);
     });
   },
 
@@ -66,11 +82,38 @@ const User = {
 
   // Récupération d'un utilisateur par ID
   findById: (id, callback) => {
-    const query = "SELECT * FROM users WHERE id = $1";
-    pool.query(query, [id], (err, user) => {
-      return user;
+    const query = "SELECT id, username, isadmin FROM users WHERE id = $1";
+    pool.query(query, [id], (err, result) => {
+      if (err) {
+        return callback(err, null);
+      }
+      callback(null, result.rows[0]);
+    });
+  },
+
+  toggleAdmin: (userId, isAdmin, callback) => {
+    const query = "UPDATE users SET isadmin = $1 WHERE id = $2";
+    pool.query(query, [isAdmin, userId], (err, result) => {
+      if (err) {
+        return callback(err);
+      }
+      callback(null);
+    });
+  },
+
+  delete: (userId, callback) => {
+    const query = "DELETE FROM users WHERE id = $1";
+    pool.query(query, [userId], (err, result) => {
+      if (err) {
+        return callback(err);
+      }
+      callback(null);
     });
   },
 };
 
-module.exports = { User, createUsersTable };
+module.exports = {
+  User,
+  pool,
+  createUsersTable,
+};

@@ -19,12 +19,13 @@
         </div>
         <div class="flex items-center space-x-4">
           <form
-            action="/admin/toggle-admin?userId=<%= user.id %>"
+            action="/admin/toggle-admin/<%= user.id %>"
             method="POST"
             class="flex items-center"
           >
-            <input type="checkbox" name="isAdmin" <%= user.isAdmin ? 'checked' :
-            '' %> onchange="this.form.submit()" class="h-4 w-4 text-blue-600
+            <input type="checkbox" name="isAdmin" <%= user.isadmin ? 'checked' :
+            '' %> <%= user.id === userId ? 'disabled' : '' %>
+            onchange="this.form.submit()" class="h-4 w-4 text-blue-600
             focus:ring-blue-500 border-gray-300 rounded mr-2" />
             <label class="text-sm text-gray-700">Admin</label>
           </form>
