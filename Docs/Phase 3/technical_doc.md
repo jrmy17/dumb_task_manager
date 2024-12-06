@@ -43,4 +43,4 @@
 ## Utilisateur Admin par défaut
 
 - **Username :** admin
-- **Password :** admin123
+- **Password :** fezq265e1rgAZZFS45$&d5az

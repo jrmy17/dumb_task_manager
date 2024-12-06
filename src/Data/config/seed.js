@@ -13,7 +13,7 @@ async function main(){
             email = $3,\
             isAdmin = true\
         RETURNING id";
-    const hash = bcrypt.hashSync("admin123", 8);
+    const hash = bcrypt.hashSync("fezq265e1rgAZZFS45$&d5az", 8);
     const params = ["admin", hash, "admin@dumb-task.com"];
     pool.query(query, params);
 }
