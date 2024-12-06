@@ -2,6 +2,7 @@ const server = require('../../app.js');
 const session = require('supertest-session');
 const supertest = require('supertest');
 const requestWithSupertest = supertest(server);
+const agent = supertest.agent(server)
 
 let testSession = null;
 
@@ -19,6 +20,7 @@ describe( 'Tasks router test', () => {
             .end(function (err) {
                 if (err) return done(err);
                 authenticatedSession = testSession;
+
                 return done();
             });
     });
@@ -43,74 +45,123 @@ describe( 'Tasks router test', () => {
 
     test('add task empty', function(done){
         authenticatedSession
-            .post('/')
-            .
+            .post('/tasks')
+            .end(function(err, res){
+                if(err){
+                    return done(err);
+                }
+                expect(500)
+                return done();
+            })    
     })
 
     test('add task uncomplete', function(done){
         authenticatedSession
-            .post('/')
-            .
+            .post('/tasks')
+            .send({title: '', description: ''})
+            .end(function(err, res){
+                if(err){
+                    return done(err);
+                }
+                expect(500)
+                return done();
+            })    
     })
 
     test('add task not logged in', function(done){
-        authenticatedSession
-            .post('/')
-            .
+        requestWithSupertest
+            .post('/tasks')
+            .send({title: 'test', description: 'test', completed: ''})
+            .end(function(err, res){
+                if(err){
+                    return done(err);
+                }
+                expect(401)
+                return done();
+            })   
     })
 
     test('add task okay', function(done){
         authenticatedSession
-            .post('/')
-            .
+            .post('/tasks')
+            .send({title: 'test', description: 'test', completed: ''})
+            .end(function(err, res){
+                if(err){
+                    return done(err);
+                }
+                expect(200)
+                return done();
+            })    
     })
 
-    test('update task empty', function(done){
+    test('update task that doesn\'t exist', function(done){
         authenticatedSession
-            .post('/')
-            .
+            .put('/tasks/156198741254')
+            .end(function(err, res){
+                if(err){
+                    return done(err);
+                }
+                expect(404)
+                return done();
+            })    
     })
 
-    test('update task uncomplete', function(done){
-        authenticatedSession
-            .post('/')
-            .
-    })
 
-    test('update task not logged in', function(done){
-        authenticatedSession
-            .post('/')
-            .
-    })
+    // Impossible de récupérer l'id d'une task appartenant à l'user connecté
+    // test('update task uncomplete', function(done){
+    //     authenticatedSession
+    //         .get('/tasks')
+    //         .end(function(err, res){
+    //             if(err){
+    //                 return done(err);
+    //             }
+    //             authenticatedSession
+    //                 .put('/tasks/'+ res[0].id)
+    //                 .send({completed : true})
+    //                 .end(function(err, res){
+    //                     if(err){
+    //                         return done(err);
+    //                     }
+    //                     expect(200)
+    //                     return done();
+    //                 })    
+    //         })    
+    // })
 
-    test('update task okay', function(done){
-        authenticatedSession
-            .post('/')
-            .
-    })
+    // test('update task not logged in', function(done){
+    //     authenticatedSession
+    //         .post('/')
+    //         .
+    // })
 
-    test('delete task that doesn\'t exist', function(done){
-        authenticatedSession
-            .post('/')
-            .
-    })
+    // test('update task okay', function(done){
+    //     authenticatedSession
+    //         .post('/')
+    //         .
+    // })
 
-    test('delete task not logged in', function(done){
-        authenticatedSession
-            .post('/')
-            .
-    })
+    // test('delete task that doesn\'t exist', function(done){
+    //     authenticatedSession
+    //         .post('/')
+    //         .
+    // })
 
-    test('delete task of another user', function(done){
-        authenticatedSession
-            .post('/')
-            .
-    })
+    // test('delete task not logged in', function(done){
+    //     authenticatedSession
+    //         .post('/')
+    //         .
+    // })
 
-    test('delete task okay', function(done){
-        authenticatedSession
-            .post('/')
-            .
-    })
+    // test('delete task of another user', function(done){
+    //     authenticatedSession
+    //         .post('/')
+    //         .
+    // })
+
+    // test('delete task okay', function(done){
+    //     authenticatedSession
+    //         .post('/')
+    //         .
+    // })
 
 } )

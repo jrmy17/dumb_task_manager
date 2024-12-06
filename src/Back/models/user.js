@@ -24,7 +24,6 @@ const User = {
   },
 
   findByUsername: (username, callback) => {
-    console.log(username);
     const query = "SELECT * FROM users WHERE username = $1";
     pool.query(query, [username], (err, user) => {
       callback(err, user.rows[0]);
