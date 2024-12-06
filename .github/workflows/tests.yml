@@ -33,16 +33,20 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
+          cache-dependency-path: src/package.json
 
       - name: Installation des dépendances
+        working-directory: ./src
         run: npm ci
 
       - name: Configuration de la base de données
+        working-directory: ./src
         run: |
           cp .env.example .env
           npm run setup
 
       - name: Tests Backend
+        working-directory: ./src
         run: npm run test:back
         env:
           POSTGRES_HOST: localhost
@@ -51,9 +55,11 @@ jobs:
           POSTGRES_DB: dumb_tasks
 
       - name: Tests Frontend
+        working-directory: ./src
         run: npm run test:front
 
       - name: Tests E2E
+        working-directory: ./src
         run: |
           npm start &
           npx wait-on http://localhost:3000
