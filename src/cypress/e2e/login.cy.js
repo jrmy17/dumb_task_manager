@@ -14,7 +14,7 @@ describe("Test de connexion", () => {
     cy.url().should("include", "/login");
 
     cy.get("#username").type("admin");
-    cy.get("#password").type("admin123");
+    cy.get("#password").type("fezq265e1rgAZZFS45$&d5az");
 
     cy.get("form").submit();
 
