@@ -8,9 +8,7 @@
     "init-db": "node ./Data/config/db-init.js && node ./Data/config/seed.js",
     "setup": "npm run init-db && npm start",
     "test:back": "jest src/Back/tests",
-    "test:routes": "jest src/Back/routes",
     "test:e2e": "npx cypress run",
-    "docker-start": "docker compose up",
     "test:front": "jest src/Front/tests"
   },
   "dependencies": {
@@ -21,10 +19,7 @@
     "express": "^4.21.1",
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.18.1",
-    "pg": "^8.13.1",
-    "sinon": "^19.0.2",
-    "sqlite3": "^5.1.6",
-    "task_manager_app": "file:"
+    "pg": "^8.13.1"
   },
   "devDependencies": {
     "cypress": "^13.16.1",

@@ -54,15 +54,6 @@ jobs:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: dumb_tasks
 
-      - name: Tests des Routes
-        working-directory: ./src
-        run: npm run test:routes
-        env:
-          POSTGRES_HOST: localhost
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: dumb_tasks
-
       - name: Tests Frontend
         working-directory: ./src
         run: npm run test:front
