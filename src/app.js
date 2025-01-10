@@ -7,6 +7,10 @@ const dotenv = require("dotenv").config();
 const expressLayouts = require("express-ejs-layouts");
 const pgSession = require("connect-pg-simple")(session);
 const { pool } = require("./Back/models/user");
+const cors = require("cors")
+
+// cors
+app.use(cors())
 
 // Middleware
 
@@ -41,6 +45,9 @@ const authRoutes = require("./Back/routes/auth");
 const taskRoutes = require("./Back/routes/tasks");
 const adminRoutes = require("./Back/routes/admin");
 
+
+const apiAuthRoutes = require("./Back/routes/api/auth");
+
 app.get("/", (req, res) => {
   if (req.session.userId) {
     const { User } = require("./Back/models/user");
@@ -61,6 +68,7 @@ app.get("/", (req, res) => {
 app.use("/", authRoutes);
 app.use("/tasks", taskRoutes);
 app.use("/admin", adminRoutes);
+app.use("/api/user", apiAuthRoutes)
 
 // Server setup
 const PORT = process.env.PORT || 3000;
